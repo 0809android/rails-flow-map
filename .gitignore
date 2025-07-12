@@ -1,0 +1,60 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Ruby
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# rspec failure tracking
+.rspec_status
+
+# Documentation cache and generated files
+/.yardoc/
+/_yardoc/
+/doc/rdoc/
+/rdoc/
+
+# Environment normalization
+/.bundle/
+/vendor/bundle
+/lib/bundler/man/
+
+# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
+.rvmrc
+
+# IDE files
+/.vscode/
+/.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Local test files
+/test_*.rb
+/comprehensive_demo.rb
+/simple_test.rb
+/simulate_*.rb
+
+# Vendor directory
+/vendor/
+rails-flow-map/vendor/
+
+# Blog sample specific ignores
+/blog_sample/

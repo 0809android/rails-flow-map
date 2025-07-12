@@ -1,0 +1,51 @@
+@startuml
+!define MODEL_COLOR #FFCCFF
+!define CONTROLLER_COLOR #CCCCFF
+!define ACTION_COLOR #CCFFCC
+
+package "Models" <<Database>> {
+  class User <<Model>> {
+    ..
+  }
+  class Post <<Model>> {
+    ..
+  }
+  class Comment <<Model>> {
+    ..
+  }
+  class Profile <<Model>> {
+    ..
+  }
+  class Role <<Model>> {
+    ..
+  }
+  class Tag <<Model>> {
+    ..
+  }
+  class PostTag <<Model>> {
+    ..
+  }
+}
+
+User --> "*" Post : has_many posts
+User --> "*" Comment : has_many comments
+User --> "1" Profile : has_one profile
+User "*" <--> "*" Role : has_and_belongs_to_many roles
+
+Post --> "1" User : belongs_to user
+Post --> "*" Comment : has_many comments
+Post --> "*" PostTag : has_many post_tags
+
+Comment --> "1" User : belongs_to user
+Comment --> "1" Post : belongs_to post
+Comment --> "1" Comment : belongs_to parent_comment
+Comment --> "*" Comment : has_many child_comments
+
+Profile --> "1" User : belongs_to user
+
+Tag --> "*" PostTag : has_many post_tags
+
+PostTag --> "1" Post : belongs_to post
+PostTag --> "1" Tag : belongs_to tag
+
+@enduml
