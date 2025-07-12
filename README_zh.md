@@ -189,13 +189,13 @@ end
 
 ### 快速参考
 - 📖 [**使用示例**](USAGE_EXAMPLES_zh.md) - 全面使用指南
-- ⚡ [**快速参考**](QUICK_REFERENCE.md) - 常用命令和模式
+- ⚡ [**快速参考**](QUICK_REFERENCE_zh.md) - 常用命令和模式
 - 🔧 [**API文档**](https://rubydoc.info/github/railsflowmap/rails-flow-map) - YARD文档
 
 ### 集成指南
-- 🔄 [**CI/CD集成**](docs/ci_cd_integration.md) - GitHub Actions、GitLab CI
-- 💻 [**VS Code集成**](doc/vscode_integration.md) - 编辑器设置和任务
-- 🐳 [**Docker集成**](docs/docker_integration.md) - 容器化工作流
+- 🔄 [**CI/CD集成**](docs/ci_cd_integration_zh.md) - GitHub Actions、GitLab CI
+- 💻 [**VS Code集成**](docs/vscode_integration_zh.md) - 编辑器设置和任务
+- 🐳 [**Docker集成**](docs/docker_integration_zh.md) - 容器化工作流
 
 ### 示例
 - 🚀 [**基础示例**](examples/basic_usage.rb) - 入门代码示例
@@ -256,7 +256,7 @@ git add ARCHITECTURE_CHANGES.md
 
 ## 🤝 贡献
 
-我们欢迎贡献！详情请参见[贡献指南](CONTRIBUTING.md)。
+我们欢迎贡献！详情请参见[贡献指南](CONTRIBUTING_zh.md)。
 
 ### 开发环境设置
 

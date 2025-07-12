@@ -189,13 +189,13 @@ end
 
 ### クイックリファレンス
 - 📖 [**使用例**](USAGE_EXAMPLES_ja.md) - 包括的な使用ガイド
-- ⚡ [**クイックリファレンス**](QUICK_REFERENCE.md) - 一般的なコマンドとパターン
+- ⚡ [**クイックリファレンス**](QUICK_REFERENCE_ja.md) - 一般的なコマンドとパターン
 - 🔧 [**APIドキュメント**](https://rubydoc.info/github/railsflowmap/rails-flow-map) - YARD文書
 
 ### 統合ガイド
-- 🔄 [**CI/CD統合**](docs/ci_cd_integration.md) - GitHub Actions、GitLab CI
-- 💻 [**VS Code統合**](doc/vscode_integration.md) - エディタ設定とタスク
-- 🐳 [**Docker統合**](docs/docker_integration.md) - コンテナ化ワークフロー
+- 🔄 [**CI/CD統合**](docs/ci_cd_integration_ja.md) - GitHub Actions、GitLab CI
+- 💻 [**VS Code統合**](docs/vscode_integration_ja.md) - エディタ設定とタスク
+- 🐳 [**Docker統合**](docs/docker_integration_ja.md) - コンテナ化ワークフロー
 
 ### 例
 - 🚀 [**基本例**](examples/basic_usage.rb) - 入門コードサンプル
@@ -256,7 +256,7 @@ git add ARCHITECTURE_CHANGES.md
 
 ## 🤝 貢献
 
-貢献を歓迎します！詳細は[貢献ガイド](CONTRIBUTING.md)をご覧ください。
+貢献を歓迎します！詳細は[貢献ガイド](CONTRIBUTING_ja.md)をご覧ください。
 
 ### 開発環境設定
 

@@ -194,7 +194,7 @@ end
 
 ### Integration Guides
 - 🔄 [**CI/CD Integration**](docs/ci_cd_integration.md) - GitHub Actions, GitLab CI
-- 💻 [**VS Code Integration**](doc/vscode_integration.md) - Editor setup and tasks
+- 💻 [**VS Code Integration**](docs/vscode_integration.md) - Editor setup and tasks
 - 🐳 [**Docker Integration**](docs/docker_integration.md) - Containerized workflows
 
 ### Examples

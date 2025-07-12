@@ -63,3 +63,6 @@ demo_*.rb
 *_demo.rb
 test_*.rb
 simulate_*.rb
+
+# Claude development notes
+CLAUDE.md
