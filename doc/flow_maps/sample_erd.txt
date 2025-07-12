@@ -1,0 +1,39 @@
+# Entity Relationship Diagram
+
+```
+┌─────────────────────┐
+│        User         │
+├─────────────────────┤
+│ id         :integer │
+│ created_at :datetime│
+│ updated_at :datetime│
+└─────────────────────┘
+
+┌─────────────────────┐
+│        Post         │
+├─────────────────────┤
+│ id         :integer │
+│ created_at :datetime│
+│ updated_at :datetime│
+│ :user_id   :integer │
+└─────────────────────┘
+
+┌─────────────────────┐
+│       Comment       │
+├─────────────────────┤
+│ id         :integer │
+│ created_at :datetime│
+│ updated_at :datetime│
+│ :user_id   :integer │
+│ :post_id   :integer │
+└─────────────────────┘
+
+## Relationships
+
+Post belongs_to User
+Comment belongs_to User
+Comment belongs_to Post
+User has_many Post
+User has_many Comment
+Post has_many Comment
+```

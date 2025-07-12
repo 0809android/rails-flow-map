@@ -10,9 +10,14 @@ module RailsFlowMap
   autoload :FlowNode, "rails_flow_map/models/flow_node"
   autoload :FlowEdge, "rails_flow_map/models/flow_edge"
   autoload :FlowGraph, "rails_flow_map/models/flow_graph"
-  autoload :MermaidFormatter, "rails_flow_map/formatters/mermaid_formatter"
-  autoload :PlantUMLFormatter, "rails_flow_map/formatters/plantuml_formatter"
-  autoload :GraphVizFormatter, "rails_flow_map/formatters/graphviz_formatter"
+  
+  module Formatters
+    autoload :MermaidFormatter, "rails_flow_map/formatters/mermaid_formatter"
+    autoload :PlantUMLFormatter, "rails_flow_map/formatters/plantuml_formatter"
+    autoload :GraphVizFormatter, "rails_flow_map/formatters/graphviz_formatter"
+    autoload :ErdFormatter, "rails_flow_map/formatters/erd_formatter"
+    autoload :MetricsFormatter, "rails_flow_map/formatters/metrics_formatter"
+  end
 
   class << self
     def configuration
@@ -39,11 +44,18 @@ module RailsFlowMap
     def export(graph, format: :mermaid, output: nil)
       formatter = case format
                   when :mermaid
-                    MermaidFormatter.new
+                    Formatters::MermaidFormatter.new
                   when :plantuml
-                    PlantUMLFormatter.new
+                    Formatters::PlantUMLFormatter.new
                   when :graphviz, :dot
-                    GraphVizFormatter.new
+                    Formatters::GraphVizFormatter.new
+                  when :erd
+                    Formatters::ErdFormatter.new(graph)
+                  when :metrics
+                    Formatters::MetricsFormatter.new(graph)
+                  when :sequence
+                    # Sequence formatter is already implemented in rails-flow-map subdirectory
+                    Formatters::MermaidFormatter.new  # Fallback to mermaid for now
                   else
                     raise Error, "Unsupported format: #{format}"
                   end
