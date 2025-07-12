@@ -34,8 +34,11 @@ graph TD
 - **コントローラー**: アクションとサービス呼び出し
 - **サービス層**: ビジネスロジックとモデルアクセス
 
-### PlantUMLダイアグラム
-![PlantUML](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/0809android/rails-flow-map/main/doc/flow_maps/application_models.puml)
+### PlantUMLダイアグラム表示方法
+
+- **オンラインビューア**: [PlantUML Web Server](http://www.plantuml.com/plantuml/uml/)で`.puml`ファイル内容をペースト
+- **詳細な表示方法**: [PlantUMLビューアガイド](PLANTUML_VIEWER.md)を参照
+- **生成ファイル**: [`application_models.puml`](doc/flow_maps/application_models.puml), [`blog_app_models.puml`](doc/flow_maps/blog_app_models.puml)
 
 ## 🚀 インストール
 
