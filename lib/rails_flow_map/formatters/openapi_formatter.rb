@@ -51,6 +51,9 @@ module RailsFlowMap
       def generate_paths
         paths = {}
         
+        # Build edge index for O(1) lookups
+        @edge_index = build_edge_index
+        
         # ルートノードから情報を収集
         route_nodes = @graph.nodes_by_type(:route)
         
@@ -67,10 +70,18 @@ module RailsFlowMap
         
         paths
       end
+      
+      def build_edge_index
+        index = Hash.new { |h, k| h[k] = [] }
+        @graph.edges.each do |edge|
+          index[[edge.from, edge.type]] << edge
+        end
+        index
+      end
 
       def generate_operation(route_node)
         # ルートに接続されているアクションを探す
-        action_edge = @graph.edges.find { |e| e.from == route_node.id && e.type == :routes_to }
+        action_edge = @edge_index[[route_node.id, :routes_to]]&.first
         action_node = action_edge ? @graph.find_node(action_edge.to) : nil
         
         controller_name = extract_controller_name(route_node)
@@ -95,23 +106,23 @@ module RailsFlowMap
 
       def extract_controller_name(route_node)
         controller = route_node.attributes[:controller] || 'application'
-        controller.split('/').last.gsub('_controller', '').camelize
+        camelize(controller.split('/').last.gsub('_controller', ''))
       end
 
       def generate_summary(controller_name, action_name)
         case action_name
         when 'index'
-          "List all #{controller_name.pluralize}"
+          "List all #{pluralize(controller_name)}"
         when 'show'
-          "Get a specific #{controller_name.singularize}"
+          "Get a specific #{singularize(controller_name)}"
         when 'create'
-          "Create a new #{controller_name.singularize}"
+          "Create a new #{singularize(controller_name)}"
         when 'update'
-          "Update a #{controller_name.singularize}"
+          "Update a #{singularize(controller_name)}"
         when 'destroy'
-          "Delete a #{controller_name.singularize}"
+          "Delete a #{singularize(controller_name)}"
         else
-          "#{action_name.humanize} #{controller_name}"
+          "#{humanize(action_name)} #{controller_name}"
         end
       end
 
@@ -145,7 +156,7 @@ module RailsFlowMap
             name: param[0],
             in: 'path',
             required: true,
-            description: "ID of the #{param[0].singularize}",
+            description: "ID of the #{singularize(param[0])}",
             schema: {
               type: 'integer',
               format: 'int64'
@@ -316,7 +327,7 @@ module RailsFlowMap
 
       def extract_model_name(route_node)
         controller = route_node.attributes[:controller] || ''
-        controller.split('/').last.gsub('_controller', '').singularize.camelize
+        camelize(singularize(controller.split('/').last.gsub('_controller', '')))
       end
 
       def generate_schemas
@@ -422,7 +433,7 @@ module RailsFlowMap
       end
 
       def generate_input_schema(model)
-        schema = generate_model_schema(model).deep_dup
+        schema = deep_dup(generate_model_schema(model))
         
         # 読み取り専用フィールドを削除
         schema[:properties].delete(:id)
@@ -472,49 +483,45 @@ module RailsFlowMap
           }
         }
       end
+      
+      # String manipulation helpers (avoid monkey-patching)
+      def camelize(str)
+        str.to_s.split('_').map(&:capitalize).join
+      end
+      
+      def singularize(str)
+        str = str.to_s
+        case str
+        when /ies$/
+          str.sub(/ies$/, 'y')
+        when /ses$/, /xes$/, /zes$/, /ches$/, /shes$/
+          str.sub(/es$/, '')
+        when /s$/
+          str.sub(/s$/, '')
+        else
+          str
+        end
+      end
+      
+      def pluralize(str)
+        str = str.to_s
+        case str
+        when /y$/
+          str.sub(/y$/, 'ies')
+        when /s$/, /x$/, /z$/, /ch$/, /sh$/
+          str + 'es'
+        else
+          str + 's'
+        end
+      end
+      
+      def humanize(str)
+        str.to_s.gsub('_', ' ').capitalize
+      end
+      
+      def deep_dup(hash)
+        Marshal.load(Marshal.dump(hash))
+      end
   end
 end
 
-# String extension for Rails-like methods
-class String
-  def camelize
-    self.split('_').map(&:capitalize).join
-  end
-  
-  def singularize
-    # 簡易実装
-    case self
-    when /ies$/
-      self.sub(/ies$/, 'y')
-    when /ses$/, /xes$/, /zes$/, /ches$/, /shes$/
-      self.sub(/es$/, '')
-    when /s$/
-      self.sub(/s$/, '')
-    else
-      self
-    end
-  end
-  
-  def pluralize
-    # 簡易実装
-    case self
-    when /y$/
-      self.sub(/y$/, 'ies')
-    when /s$/, /x$/, /z$/, /ch$/, /sh$/
-      self + 'es'
-    else
-      self + 's'
-    end
-  end
-  
-  def humanize
-    self.gsub('_', ' ').capitalize
-  end
-end
-
-# Hash extension for deep_dup
-class Hash
-  def deep_dup
-    Marshal.load(Marshal.dump(self))
-  end
-end

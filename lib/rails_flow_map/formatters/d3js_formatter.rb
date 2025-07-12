@@ -1,3 +1,5 @@
+require 'cgi'
+
 module RailsFlowMap
   class D3jsFormatter
       def initialize(graph, options = {})
@@ -184,7 +186,7 @@ module RailsFlowMap
 
     <script>
         // データの準備
-        const graphData = #{generate_graph_data};
+        const graphData = #{generate_graph_data.to_json};
         
         // 色の定義
         const colors = {
@@ -447,7 +449,7 @@ module RailsFlowMap
           }
         end
         
-        { nodes: nodes, links: links }.to_json
+        { nodes: nodes, links: links }
       end
   end
 end

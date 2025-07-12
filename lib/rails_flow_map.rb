@@ -1,6 +1,7 @@
 require "set"
 require "json"
 require "yaml"
+require "cgi"
 require "rails_flow_map/version"
 require "rails_flow_map/configuration"
 require "rails_flow_map/engine" if defined?(Rails)
@@ -89,7 +90,14 @@ module RailsFlowMap
     end
     
     def analyze_at(ref)
-      # Simplified version - would need Git integration
+      # Note: This is a placeholder implementation
+      # In a real implementation, you would:
+      # 1. Save current changes
+      # 2. Checkout the specified ref
+      # 3. Run analysis
+      # 4. Return to original state
+      # 
+      # For now, returns current state
       analyze
     end
   end

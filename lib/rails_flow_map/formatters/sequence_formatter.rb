@@ -248,7 +248,9 @@ module RailsFlowMap
 
       def sanitize_name(name)
         # Mermaidで使用できない文字を置換
-        name.gsub(/[^a-zA-Z0-9_]/, '_').gsub(/^_+|_+$/, '')
+        sanitized = name.to_s.gsub(/[^a-zA-Z0-9_]/, '_').gsub(/^_+|_+$/, '')
+        # 空文字列になった場合はデフォルト値を返す
+        sanitized.empty? ? "node_#{name.hash.abs}" : sanitized
       end
   end
 end

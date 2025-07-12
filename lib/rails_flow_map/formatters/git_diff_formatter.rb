@@ -1,3 +1,5 @@
+require 'cgi'
+
 module RailsFlowMap
   class GitDiffFormatter
       def initialize(before_graph, after_graph, options = {})
@@ -474,7 +476,7 @@ module RailsFlowMap
         html += '<h3>⚠️ 破壊的変更</h3>'
         html += '<ul>'
         diff[:summary][:breaking_changes].each do |change|
-          html += "<li>#{change}</li>"
+          html += "<li>#{CGI.escapeHTML(change)}</li>"
         end
         html += '</ul>'
         html += '</div>'
@@ -513,9 +515,9 @@ module RailsFlowMap
         # 削除されたノード
         diff[:removed_nodes].each do |node|
           nodes << {
-            id: node.id,
-            name: node.name,
-            type: node.type,
+            id: CGI.escapeHTML(node.id.to_s),
+            name: CGI.escapeHTML(node.name.to_s),
+            type: node.type.to_s,
             status: 'removed'
           }
         end
