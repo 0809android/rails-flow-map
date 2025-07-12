@@ -188,7 +188,7 @@ end
 ## 📚 ドキュメント
 
 ### クイックリファレンス
-- 📖 [**使用例**](USAGE_EXAMPLES.md) - 包括的な使用ガイド
+- 📖 [**使用例**](USAGE_EXAMPLES_ja.md) - 包括的な使用ガイド
 - ⚡ [**クイックリファレンス**](QUICK_REFERENCE.md) - 一般的なコマンドとパターン
 - 🔧 [**APIドキュメント**](https://rubydoc.info/github/railsflowmap/rails-flow-map) - YARD文書
 

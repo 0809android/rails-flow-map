@@ -188,7 +188,7 @@ end
 ## 📚 文档
 
 ### 快速参考
-- 📖 [**使用示例**](USAGE_EXAMPLES.md) - 全面使用指南
+- 📖 [**使用示例**](USAGE_EXAMPLES_zh.md) - 全面使用指南
 - ⚡ [**快速参考**](QUICK_REFERENCE.md) - 常用命令和模式
 - 🔧 [**API文档**](https://rubydoc.info/github/railsflowmap/rails-flow-map) - YARD文档
 
