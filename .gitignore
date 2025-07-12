@@ -46,15 +46,14 @@ Thumbs.db
 # Logs
 *.log
 
-# Local test files
+# Local test files (keep blog_sample test files as examples)
 /test_*.rb
-/comprehensive_demo.rb
-/simple_test.rb
-/simulate_*.rb
 
 # Vendor directory
 /vendor/
 rails-flow-map/vendor/
 
-# Blog sample specific ignores
-/blog_sample/
+# Demo and test files (exclude specific demo files but keep blog_sample as example)
+/comprehensive_demo.rb
+/simple_test.rb
+/simulate_rake_tasks.rb
