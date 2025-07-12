@@ -1,7 +1,34 @@
 require 'cgi'
 
 module RailsFlowMap
+  # Compares two graph states and visualizes the differences
+  #
+  # This formatter analyzes changes between two versions of an application's
+  # architecture, highlighting additions, removals, and modifications. It can
+  # output in multiple formats including Mermaid, HTML, and plain text.
+  #
+  # @example Basic usage
+  #   before = RailsFlowMap.analyze_at('main')
+  #   after = RailsFlowMap.analyze
+  #   formatter = GitDiffFormatter.new(before, after)
+  #   diff = formatter.format
+  #
+  # @example HTML output with custom options
+  #   formatter = GitDiffFormatter.new(before, after, {
+  #     format: :html,
+  #     include_metrics: true,
+  #     highlight_breaking_changes: true
+  #   })
+  #
   class GitDiffFormatter
+      # Creates a new diff formatter
+      #
+      # @param before_graph [FlowGraph] The graph representing the "before" state
+      # @param after_graph [FlowGraph] The graph representing the "after" state
+      # @param options [Hash] Configuration options
+      # @option options [Symbol] :format Output format (:mermaid, :html, :text) (default: :mermaid)
+      # @option options [Boolean] :include_metrics Include complexity metrics (default: true)
+      # @option options [Boolean] :highlight_breaking_changes Highlight breaking changes (default: true)
       def initialize(before_graph, after_graph, options = {})
         @before_graph = before_graph
         @after_graph = after_graph
@@ -9,6 +36,10 @@ module RailsFlowMap
         @format = options[:format] || :mermaid
       end
 
+      # Generates the diff visualization
+      #
+      # @return [String] The formatted diff in the requested format
+      # @raise [ArgumentError] If an unknown format is specified
       def format
         diff_result = analyze_differences
         

@@ -1,5 +1,33 @@
 module RailsFlowMap
+  # Generates sequence diagrams showing request flow through the application
+  #
+  # This formatter creates Mermaid sequence diagrams that visualize how requests
+  # flow through controllers, services, models, and the database. It can optionally
+  # include middleware, callbacks, and validation steps.
+  #
+  # @example Basic usage
+  #   formatter = SequenceFormatter.new(graph, endpoint: '/api/users')
+  #   diagram = formatter.format
+  #
+  # @example With all features enabled
+  #   formatter = SequenceFormatter.new(graph, {
+  #     endpoint: '/api/users',
+  #     include_middleware: true,
+  #     include_callbacks: true,
+  #     include_validations: true,
+  #     include_database: true
+  #   })
+  #
   class SequenceFormatter
+      # Creates a new sequence diagram formatter
+      #
+      # @param graph [FlowGraph] The graph to analyze
+      # @param options [Hash] Configuration options
+      # @option options [String] :endpoint The endpoint to analyze (analyzes all if nil)
+      # @option options [Boolean] :include_middleware Include middleware in diagram (default: false)
+      # @option options [Boolean] :include_callbacks Include callbacks in diagram (default: false)
+      # @option options [Boolean] :include_validations Include validations in diagram (default: false)
+      # @option options [Boolean] :include_database Include database queries in diagram (default: true)
       def initialize(graph, options = {})
         @graph = graph
         @endpoint = options[:endpoint]
@@ -9,6 +37,10 @@ module RailsFlowMap
         @include_database = options[:include_database] || true
       end
 
+      # Generates the sequence diagram
+      #
+      # @param graph [FlowGraph] Optional graph to format (uses instance graph by default)
+      # @return [String] Mermaid sequence diagram markup
       def format(graph = @graph)
         output = []
         output << "```mermaid"

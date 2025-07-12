@@ -1,43 +1,3 @@
-require 'cgi'
-
-module RailsFlowMap
-  # Generates an interactive HTML visualization using D3.js library
-  # 
-  # This formatter creates a full HTML page with embedded JavaScript that renders
-  # an interactive force-directed graph. Users can drag nodes, zoom, search, and
-  # filter by node types.
-  #
-  # @example Basic usage
-  #   formatter = D3jsFormatter.new(graph)
-  #   html = formatter.format
-  #   File.write('interactive.html', html)
-  #
-  # @example With custom options
-  #   formatter = D3jsFormatter.new(graph, {
-  #     width: 1200,
-  #     height: 800,
-  #     node_colors: { model: '#ff0000', controller: '#00ff00' }
-  #   })
-  #
-  class D3jsFormatter
-      # Creates a new D3.js formatter instance
-      #
-      # @param graph [FlowGraph] The graph to visualize
-      # @param options [Hash] Optional configuration
-      # @option options [Integer] :width The width of the visualization canvas
-      # @option options [Integer] :height The height of the visualization canvas
-      # @option options [Hash] :node_colors Custom colors for node types
-      def initialize(graph, options = {})
-        @graph = graph
-        @options = options
-      end
-
-      # Generates the HTML visualization
-      #
-      # @param graph [FlowGraph] Optional graph to format (uses instance graph by default)
-      # @return [String] Complete HTML document with embedded D3.js visualization
-      def format(graph = @graph)
-        html_content = <<~HTML
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -215,7 +175,7 @@ module RailsFlowMap
 
     <script>
         // データの準備
-        const graphData = #{generate_graph_data.to_json};
+        const graphData = {"nodes":[{"id":"user","name":"User","type":"model","attributes":{"associations":["has_many :posts","has_many :comments"]}},{"id":"post","name":"Post","type":"model","attributes":{"associations":["belongs_to :user","has_many :comments"]}},{"id":"comment","name":"Comment","type":"model","attributes":{"associations":["belongs_to :user","belongs_to :post"]}},{"id":"category","name":"Category","type":"model","attributes":{"associations":["has_many :posts"]}},{"id":"tag","name":"Tag","type":"model","attributes":{"associations":["has_many :post_tags"]}},{"id":"like","name":"Like","type":"model","attributes":{"associations":["belongs_to :user","belongs_to :post"]}},{"id":"users_controller","name":"Api::V1::UsersController","type":"controller","attributes":{"actions":["index","show","create"]}},{"id":"posts_controller","name":"Api::V1::PostsController","type":"controller","attributes":{"actions":["index","show","create"]}},{"id":"comments_controller","name":"Api::V1::CommentsController","type":"controller","attributes":{"actions":["create","destroy"]}},{"id":"user_service","name":"UserService","type":"service","attributes":{}},{"id":"post_service","name":"PostService","type":"service","attributes":{}},{"id":"comment_service","name":"CommentService","type":"service","attributes":{}},{"id":"users_index_route","name":"GET /api/v1/users","type":"route","attributes":{"path":"/api/v1/users","verb":"GET","controller":"api/v1/users","action":"index"}},{"id":"posts_index_route","name":"GET /api/v1/posts","type":"route","attributes":{"path":"/api/v1/posts","verb":"GET","controller":"api/v1/posts","action":"index"}}],"links":[{"source":"post","target":"user","type":"belongs_to","label":null},{"source":"comment","target":"user","type":"belongs_to","label":null},{"source":"comment","target":"post","type":"belongs_to","label":null},{"source":"like","target":"user","type":"belongs_to","label":null},{"source":"like","target":"post","type":"belongs_to","label":null},{"source":"users_controller","target":"user","type":"uses_model","label":null},{"source":"posts_controller","target":"post","type":"uses_model","label":null},{"source":"comments_controller","target":"comment","type":"uses_model","label":null},{"source":"users_controller","target":"user_service","type":"uses_service","label":null},{"source":"posts_controller","target":"post_service","type":"uses_service","label":null},{"source":"comments_controller","target":"comment_service","type":"uses_service","label":null},{"source":"users_index_route","target":"users_controller","type":"routes_to","label":null},{"source":"posts_index_route","target":"posts_controller","type":"routes_to","label":null}]};
         
         // 色の定義
         const colors = {
@@ -452,37 +412,3 @@ module RailsFlowMap
     </script>
 </body>
 </html>
-        HTML
-        
-        html_content
-      end
-
-      private
-
-      # Generates the graph data structure for D3.js consumption
-      #
-      # @return [Hash] Graph data with nodes and links arrays
-      # @note Node IDs and names are NOT HTML-escaped as they will be used in JavaScript
-      def generate_graph_data
-        nodes = @graph.nodes.values.map do |node|
-          {
-            id: node.id,
-            name: node.name,
-            type: node.type.to_s,
-            attributes: node.attributes
-          }
-        end
-        
-        links = @graph.edges.map do |edge|
-          {
-            source: edge.from,
-            target: edge.to,
-            type: edge.type.to_s,
-            label: edge.label
-          }
-        end
-        
-        { nodes: nodes, links: links }
-      end
-  end
-end

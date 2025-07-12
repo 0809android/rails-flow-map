@@ -1,5 +1,31 @@
 module RailsFlowMap
+  # Generates OpenAPI 3.0 specification from Rails application routes
+  #
+  # This formatter analyzes Rails routes and generates a complete OpenAPI/Swagger
+  # specification that can be used with tools like Swagger UI, Postman, or Insomnia.
+  #
+  # @example Basic usage
+  #   formatter = OpenapiFormatter.new(graph)
+  #   spec = formatter.format
+  #   File.write('openapi.yaml', spec)
+  #
+  # @example With custom configuration
+  #   formatter = OpenapiFormatter.new(graph, {
+  #     api_version: '2.0.0',
+  #     title: 'My API',
+  #     description: 'Custom API documentation',
+  #     servers: [{ url: 'https://api.myapp.com', description: 'Production' }]
+  #   })
+  #
   class OpenapiFormatter
+      # Creates a new OpenAPI formatter instance
+      #
+      # @param graph [FlowGraph] The graph containing route information
+      # @param options [Hash] Configuration options
+      # @option options [String] :api_version The API version (default: '1.0.0')
+      # @option options [String] :title The API title
+      # @option options [String] :description The API description
+      # @option options [Array<Hash>] :servers Custom server definitions
       def initialize(graph, options = {})
         @graph = graph
         @options = options
@@ -8,6 +34,10 @@ module RailsFlowMap
         @description = options[:description] || 'Auto-generated API documentation by RailsFlowMap'
       end
 
+      # Generates the OpenAPI specification
+      #
+      # @param graph [FlowGraph] Optional graph to format (uses instance graph by default)
+      # @return [String] OpenAPI 3.0 specification in YAML format
       def format(graph = @graph)
         {
           openapi: '3.0.0',
