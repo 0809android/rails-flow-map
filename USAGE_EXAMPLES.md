@@ -64,20 +64,37 @@ sequence = RailsFlowMap.export(graph,
 puts sequence
 ```
 
-### Comparing Different Versions
+### Comparing Architecture Changes Between Versions
+
+Visualize how your application's structure has changed between different Git commits, branches, or tags.
+
+**Note**: This is a manual process. You need to run the gem when you want to compare versions.
 
 ```ruby
-# Compare current version with a previous one
-before_graph = RailsFlowMap.analyze_at('v1.0.0')  # Git tag/branch
-after_graph = RailsFlowMap.analyze                # Current state
+# Example 1: Compare current state with a previous release
+before_graph = RailsFlowMap.analyze_at('v1.0.0')  # Analyze structure at v1.0.0 release
+after_graph = RailsFlowMap.analyze                # Analyze current code structure
 
-# Generate diff visualization
+# Generate architecture diff in HTML format (shows additions/deletions/changes with colors)
 diff_html = RailsFlowMap.diff(before_graph, after_graph, format: :html)
 File.write('docs/architecture_changes.html', diff_html)
 
-# Generate diff in Mermaid format
+# Generate diff in Mermaid format (viewable on GitHub/GitLab)
 diff_md = RailsFlowMap.diff(before_graph, after_graph, format: :mermaid)
 File.write('docs/architecture_diff.md', diff_md)
+```
+
+#### Practical Examples
+
+```ruby
+# During PR review: Check how a feature branch affects architecture
+before = RailsFlowMap.analyze_at('main')
+after = RailsFlowMap.analyze_at('feature/new-api')
+diff = RailsFlowMap.diff(before, after, format: :mermaid)
+
+# Before/after refactoring comparison
+before = RailsFlowMap.analyze_at('HEAD~1')  # 1 commit ago
+after = RailsFlowMap.analyze                # Current state
 ```
 
 ### Custom Configuration

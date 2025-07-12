@@ -64,20 +64,37 @@ sequence = RailsFlowMap.export(graph,
 puts sequence
 ```
 
-### 異なるバージョンの比較
+### アーキテクチャの変更履歴を比較
+
+Gitの異なるコミット・ブランチ・タグ間でアプリケーション構造の変化を可視化できます。
+
+**注意**: この機能は手動実行です。比較したいタイミングでgemを実行する必要があります。
 
 ```ruby
-# 現在のバージョンと以前のバージョンを比較
-before_graph = RailsFlowMap.analyze_at('v1.0.0')  # Gitタグ/ブランチ
-after_graph = RailsFlowMap.analyze                # 現在の状態
+# 例1: 現在の状態と過去のリリースを比較
+before_graph = RailsFlowMap.analyze_at('v1.0.0')  # v1.0.0リリース時点の構造を分析
+after_graph = RailsFlowMap.analyze                # 現在のコードの構造を分析
 
-# 差分可視化を生成
+# アーキテクチャの差分をHTML形式で出力（追加・削除・変更を色分け表示）
 diff_html = RailsFlowMap.diff(before_graph, after_graph, format: :html)
 File.write('docs/architecture_changes.html', diff_html)
 
-# Mermaid形式で差分を生成
+# Mermaid形式で差分を出力（GitHub/GitLabで表示可能）
 diff_md = RailsFlowMap.diff(before_graph, after_graph, format: :mermaid)
 File.write('docs/architecture_diff.md', diff_md)
+```
+
+#### 実用例
+
+```ruby
+# PRレビュー時：機能ブランチがアーキテクチャに与える影響を確認
+before = RailsFlowMap.analyze_at('main')
+after = RailsFlowMap.analyze_at('feature/new-api')
+diff = RailsFlowMap.diff(before, after, format: :mermaid)
+
+# リファクタリング前後の比較
+before = RailsFlowMap.analyze_at('HEAD~1')  # 1コミット前
+after = RailsFlowMap.analyze                # 現在
 ```
 
 ### カスタム設定

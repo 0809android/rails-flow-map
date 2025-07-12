@@ -64,20 +64,37 @@ sequence = RailsFlowMap.export(graph,
 puts sequence
 ```
 
-### 比较不同版本
+### 比较架构变更历史
+
+可视化应用程序结构在不同Git提交、分支或标签之间的变化。
+
+**注意**：这是手动过程。需要在想要比较版本时运行此gem。
 
 ```ruby
-# 比较当前版本与之前版本
-before_graph = RailsFlowMap.analyze_at('v1.0.0')  # Git标签/分支
-after_graph = RailsFlowMap.analyze                # 当前状态
+# 示例1：比较当前状态与之前的发布版本
+before_graph = RailsFlowMap.analyze_at('v1.0.0')  # 分析v1.0.0发布时的结构
+after_graph = RailsFlowMap.analyze                # 分析当前代码结构
 
-# 生成差异可视化
+# 生成HTML格式的架构差异（用颜色显示添加/删除/更改）
 diff_html = RailsFlowMap.diff(before_graph, after_graph, format: :html)
 File.write('docs/architecture_changes.html', diff_html)
 
-# 以Mermaid格式生成差异
+# 生成Mermaid格式的差异（可在GitHub/GitLab上查看）
 diff_md = RailsFlowMap.diff(before_graph, after_graph, format: :mermaid)
 File.write('docs/architecture_diff.md', diff_md)
+```
+
+#### 实际应用示例
+
+```ruby
+# PR审查时：检查功能分支对架构的影响
+before = RailsFlowMap.analyze_at('main')
+after = RailsFlowMap.analyze_at('feature/new-api')
+diff = RailsFlowMap.diff(before, after, format: :mermaid)
+
+# 重构前后的比较
+before = RailsFlowMap.analyze_at('HEAD~1')  # 1个提交之前
+after = RailsFlowMap.analyze                # 当前状态
 ```
 
 ### 自定义配置
