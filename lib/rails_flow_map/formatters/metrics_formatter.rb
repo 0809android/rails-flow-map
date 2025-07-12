@@ -1,6 +1,5 @@
 module RailsFlowMap
-  module Formatters
-    class MetricsFormatter
+  class MetricsFormatter
       def initialize(graph)
         @graph = graph
       end
@@ -193,6 +192,5 @@ module RailsFlowMap
         rec_stack.delete(node_id)
         false
       end
-    end
   end
 end

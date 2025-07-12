@@ -1,3 +1,6 @@
+require "set"
+require "json"
+require "yaml"
 require "rails_flow_map/version"
 require "rails_flow_map/configuration"
 require "rails_flow_map/engine" if defined?(Rails)
@@ -11,12 +14,18 @@ module RailsFlowMap
   autoload :FlowEdge, "rails_flow_map/models/flow_edge"
   autoload :FlowGraph, "rails_flow_map/models/flow_graph"
   
+  autoload :MermaidFormatter, "rails_flow_map/formatters/mermaid_formatter"
+  autoload :PlantUMLFormatter, "rails_flow_map/formatters/plantuml_formatter"
+  autoload :GraphVizFormatter, "rails_flow_map/formatters/graphviz_formatter"
+  autoload :ErdFormatter, "rails_flow_map/formatters/erd_formatter"
+  autoload :MetricsFormatter, "rails_flow_map/formatters/metrics_formatter"
+  autoload :D3jsFormatter, "rails_flow_map/formatters/d3js_formatter"
+  autoload :OpenapiFormatter, "rails_flow_map/formatters/openapi_formatter"
+  autoload :SequenceFormatter, "rails_flow_map/formatters/sequence_formatter"
+  autoload :GitDiffFormatter, "rails_flow_map/formatters/git_diff_formatter"
+  
   module Formatters
-    autoload :MermaidFormatter, "rails_flow_map/formatters/mermaid_formatter"
-    autoload :PlantUMLFormatter, "rails_flow_map/formatters/plantuml_formatter"
-    autoload :GraphVizFormatter, "rails_flow_map/formatters/graphviz_formatter"
-    autoload :ErdFormatter, "rails_flow_map/formatters/erd_formatter"
-    autoload :MetricsFormatter, "rails_flow_map/formatters/metrics_formatter"
+    # For backwards compatibility
   end
 
   class << self
@@ -41,21 +50,26 @@ module RailsFlowMap
       graph
     end
 
-    def export(graph, format: :mermaid, output: nil)
+    def export(graph, format: :mermaid, output: nil, **options)
       formatter = case format
                   when :mermaid
-                    Formatters::MermaidFormatter.new
+                    MermaidFormatter.new
                   when :plantuml
-                    Formatters::PlantUMLFormatter.new
+                    PlantUMLFormatter.new
                   when :graphviz, :dot
-                    Formatters::GraphVizFormatter.new
+                    GraphVizFormatter.new
                   when :erd
-                    Formatters::ErdFormatter.new(graph)
+                    ErdFormatter.new(graph)
                   when :metrics
-                    Formatters::MetricsFormatter.new(graph)
+                    MetricsFormatter.new(graph)
+                  when :d3js
+                    D3jsFormatter.new(graph, options)
+                  when :openapi
+                    OpenapiFormatter.new(graph, options)
                   when :sequence
-                    # Sequence formatter is already implemented in rails-flow-map subdirectory
-                    Formatters::MermaidFormatter.new  # Fallback to mermaid for now
+                    SequenceFormatter.new(graph, options)
+                  when :git_diff
+                    raise Error, "Git diff requires two graphs. Use RailsFlowMap.diff instead"
                   else
                     raise Error, "Unsupported format: #{format}"
                   end
@@ -67,6 +81,16 @@ module RailsFlowMap
       end
       
       result
+    end
+    
+    def diff(before_graph, after_graph, format: :mermaid, **options)
+      formatter = GitDiffFormatter.new(before_graph, after_graph, options.merge(format: format))
+      formatter.format
+    end
+    
+    def analyze_at(ref)
+      # Simplified version - would need Git integration
+      analyze
     end
   end
 end

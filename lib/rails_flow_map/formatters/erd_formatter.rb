@@ -1,6 +1,5 @@
 module RailsFlowMap
-  module Formatters
-    class ErdFormatter
+  class ErdFormatter
       def initialize(graph)
         @graph = graph
       end
@@ -61,6 +60,5 @@ module RailsFlowMap
         lines << "└─────────────────────┘"
         lines.join("\n")
       end
-    end
   end
 end

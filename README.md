@@ -16,6 +16,11 @@ RailsFlowMapは、Railsアプリケーションのデータフローを可視化
   - [GraphVizダイアグラム](#3-graphvizダイアグラム)
   - [ERD（Entity Relationship Diagram）](#4-erdentity-relationship-diagram)
   - [メトリクスレポート](#5-メトリクスレポート)
+  - [インタラクティブHTML（D3.js）](#6-インタラクティブhtmld3js)
+  - [OpenAPI/Swagger仕様](#7-openapiswagger仕様)
+  - [シーケンス図](#8-シーケンス図)
+  - [Git差分可視化](#9-git差分可視化)
+  - [VS Code統合](#10-vs-code統合)
 - [インストール](#-インストール)
 - [使用方法](#-使用方法)
 - [サンプルプロジェクト](#-サンプルプロジェクト)
@@ -25,10 +30,13 @@ RailsFlowMapは、Railsアプリケーションのデータフローを可視化
 ## 🎯 主な機能
 
 - **自動解析**: モデル、コントローラー、ルート、サービスを自動検出
-- **複数形式**: 5種類の可視化形式（Mermaid、PlantUML、GraphViz、ERD、Metrics）
+- **複数形式**: 10種類の可視化形式（Mermaid、PlantUML、GraphViz、ERD、Metrics、D3.js、OpenAPI、Sequence、Git Diff、VS Code統合）
 - **エンドポイント追跡**: 特定APIの内部処理フローを可視化
 - **複雑度分析**: コードの複雑度と潜在的問題を検出
 - **Rails統合**: Rakeタスクとジェネレーターを提供
+- **インタラクティブ可視化**: D3.jsによる動的なグラフ操作
+- **API文書生成**: OpenAPI/Swagger仕様の自動生成
+- **アーキテクチャ進化追跡**: Git差分による構造変化の可視化
 
 ## 📊 可視化形式と用途
 
@@ -199,6 +207,125 @@ ERDは、データベース設計の確認や、モデル間の関連を一目�
 
 **生成ファイル**: [`doc/flow_maps/metrics_report.md`](doc/flow_maps/metrics_report.md)
 
+---
+
+### 6. インタラクティブHTML（D3.js）
+
+**用途**: ブラウザで動的に操作可能な可視化
+
+D3.jsを使用したインタラクティブなグラフで、ズーム、ドラッグ、検索、フィルタリングが可能です。
+
+**機能**:
+- ノードをドラッグして配置変更
+- ダブルクリックで関連ノードをハイライト
+- 検索ボックスでコンポーネントを探す
+- タイプ別フィルタリング
+- ズーム・パン操作
+
+**生成コマンド**:
+```bash
+rake rails_flow_map:export FORMAT=d3js OUTPUT=doc/interactive.html
+open doc/interactive.html
+```
+
+**生成ファイル**: `doc/flow_maps/interactive.html`
+
+---
+
+### 7. OpenAPI/Swagger仕様
+
+**用途**: API仕様書の自動生成
+
+Rails のルート情報から OpenAPI 3.0 仕様を自動生成します。
+
+**出力例**:
+```yaml
+openapi: 3.0.0
+info:
+  title: Rails API Documentation
+  version: 1.0.0
+paths:
+  /api/v1/users:
+    get:
+      summary: List all users
+      responses:
+        '200':
+          description: Successful response
+```
+
+**用途**:
+- API ドキュメントの自動化
+- Postman/Insomnia へのインポート
+- フロントエンドチームとの仕様共有
+
+**生成ファイル**: `doc/flow_maps/openapi_spec.yaml`
+
+---
+
+### 8. シーケンス図
+
+**用途**: リクエスト処理の時系列フローを可視化
+
+エンドポイントごとに、リクエストがどのようにシステム内を流れるかを時系列で表示します。
+
+```mermaid
+sequenceDiagram
+    Client->>Router: GET /api/v1/users
+    Router->>UsersController: index
+    UsersController->>UserService: fetch_active_users
+    UserService->>User: where(active: true)
+    User-->>UserService: [users]
+    UserService-->>UsersController: users_data
+    UsersController-->>Client: 200 OK {users}
+```
+
+**オプション**:
+- ミドルウェア処理の表示
+- コールバックの表示
+- バリデーション処理の表示
+- データベースアクセスの詳細
+
+**生成ファイル**: `doc/flow_maps/sequence_*.md`
+
+---
+
+### 9. Git差分可視化
+
+**用途**: コミット間のアーキテクチャ変化を視覚化
+
+2つのグラフ状態を比較し、追加・削除・変更されたノードとエッジを表示します。
+
+**機能**:
+- ノードの追加/削除/変更検出
+- 複雑度メトリクスの変化計算
+- 破壊的変更の検出
+- 改善推奨事項の生成
+
+**使用例**:
+```ruby
+before_graph = RailsFlowMap.analyze_at('main')
+after_graph = RailsFlowMap.analyze_at('feature/new-api')
+diff = RailsFlowMap.diff(before_graph, after_graph)
+```
+
+**生成ファイル**: `doc/flow_maps/architecture_diff.md`
+
+---
+
+### 10. VS Code統合
+
+**用途**: エディタ内でリアルタイム可視化
+
+VS Code 拡張機能や設定により、コーディング中にアーキテクチャを確認できます。
+
+**統合方法**:
+- VS Code タスク設定
+- カスタムスニペット
+- ワークスペース設定
+- キーボードショートカット
+
+詳細は [VS Code統合ガイド](doc/vscode_integration.md) を参照してください。
+
 ## 🚀 インストール
 
 ### Gemfileに追加
@@ -256,6 +383,14 @@ RailsFlowMap.export(graph, format: :plantuml, output: 'models.puml')
 RailsFlowMap.export(graph, format: :graphviz, output: 'graph.dot')
 RailsFlowMap.export(graph, format: :erd, output: 'schema.txt')
 RailsFlowMap.export(graph, format: :metrics, output: 'metrics.md')
+RailsFlowMap.export(graph, format: :d3js, output: 'interactive.html')
+RailsFlowMap.export(graph, format: :openapi, output: 'api_spec.yaml')
+RailsFlowMap.export(graph, format: :sequence, output: 'sequence.md', endpoint: '/api/v1/users')
+
+# Git差分解析
+before_graph = RailsFlowMap.analyze_at('main')
+after_graph = RailsFlowMap.analyze
+diff_result = RailsFlowMap.diff(before_graph, after_graph, format: :mermaid)
 ```
 
 ## 📁 出力ファイル
@@ -269,6 +404,10 @@ RailsFlowMap.export(graph, format: :metrics, output: 'metrics.md')
 | `application_graph.dot` | GraphViz | 詳細依存グラフ |
 | `sample_erd.txt` | ERD | DBスキーマ |
 | `metrics_report.md` | Metrics | 品質分析レポート |
+| `interactive.html` | D3.js | インタラクティブ可視化 |
+| `openapi_spec.yaml` | OpenAPI | API仕様書 |
+| `sequence_*.md` | Sequence | シーケンス図 |
+| `architecture_diff.md` | Git Diff | 変更差分可視化 |
 
 ## 🎪 サンプルプロジェクト
 
@@ -332,13 +471,15 @@ ruby demo_new_formats.rb
 
 ### 今後の拡張予定
 
-[FUTURE_FORMATS.md](FUTURE_FORMATS.md) に、以下の追加予定機能が記載されています：
+以下の機能が実装済みです：
 
-- Interactive HTML (D3.js)
-- API Blueprint/OpenAPI
-- Sequence Diagrams
-- Git Diff Visualization
-- VS Code Integration
+- ✅ Interactive HTML (D3.js) - インタラクティブなグラフ操作
+- ✅ API Blueprint/OpenAPI - API仕様の自動生成
+- ✅ Sequence Diagrams - リクエストフローの時系列表示
+- ✅ Git Diff Visualization - アーキテクチャ変更の可視化
+- ✅ VS Code Integration - エディタ統合ガイド
+
+詳細は [FUTURE_FORMATS.md](FUTURE_FORMATS.md) を参照してください。
 
 ## 📝 ライセンス
 
