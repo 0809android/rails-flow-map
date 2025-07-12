@@ -53,7 +53,13 @@ Thumbs.db
 /vendor/
 rails-flow-map/vendor/
 
-# Demo and test files (exclude specific demo files but keep blog_sample as example)
-/comprehensive_demo.rb
-/simple_test.rb
-/simulate_rake_tasks.rb
+# Generated output directories
+/demo_output/
+/doc/flow_maps/
+/blog_sample/tmp/
+
+# Demo and test files
+demo_*.rb
+*_demo.rb
+test_*.rb
+simulate_*.rb
