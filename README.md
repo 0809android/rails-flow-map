@@ -40,6 +40,12 @@ graph TD
 - **詳細な表示方法**: [PlantUMLビューアガイド](PLANTUML_VIEWER.md)を参照
 - **生成ファイル**: [`application_models.puml`](doc/flow_maps/application_models.puml), [`blog_app_models.puml`](doc/flow_maps/blog_app_models.puml)
 
+### GraphVizダイアグラム表示方法
+
+- **オンラインビューア**: [Graphviz Online](https://dreampuf.github.io/GraphvizOnline/)で`.dot`ファイル内容をペースト
+- **詳細な表示方法**: [GraphVizビューアガイド](GRAPHVIZ_VIEWER.md)を参照
+- **生成ファイル**: [`application_graph.dot`](doc/flow_maps/application_graph.dot), [`blog_app_graph.dot`](doc/flow_maps/blog_app_graph.dot)
+
 ## 🚀 インストール
 
 Gemfileに追加:
