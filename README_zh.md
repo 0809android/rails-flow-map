@@ -101,7 +101,7 @@ graph TD
     Post --> Comment
     UsersController --> User
     PostsController --> Post
-    API[/api/v1/users] --> UsersController
+    API["API: /api/v1/users"] --> UsersController
 ```
 
 ### ⚡ 交互式D3.js可视化
